@@ -89,7 +89,33 @@
     border-radius: 0.8rem;
     background: var(--color-input-background);
     border: 1px solid var(--color-line-in-white);
-    outline: 0;
+    outline: 0;/*vai remover a marcação da caixinha na hora de selecionar */
     padding: 0 1.6rem;
     font: 1.6rem Archivo;
 }
+/*esse focus se refere ao momento em que clico na caixinha ai ficara no estado de focus 
+esse afrer é como se fosse uma tag de html adicionada por css*/
+.input-block{
+    /*é necessario usar esse position porque a linha que colocaramos no after precisa estar relacionada a essa caixinha, se ficasse apenas o absolute do after seria referente ao body*/
+    position: relative;
+}
+.input-block:focus-within::after{
+    /*por usar after precisa ter esse content*/
+    content: "";
+
+    width: calc(100% - 3.2rem);
+    height: 2px;
+    background: var(--color-primary-light)/**/;
+    position: absolute;
+    left: 1.6rem;
+    right: 1.6rem;
+    bottom: 0;
+}
+/*caixa de counteudo*/
+ .teacher-item{
+    background-color: var(--color-box-base);
+    border: 1px solid var(--color-line-in-white);
+    border-radius: 0.8rem;
+    margin-top: 2.4rem;
+}
+ 
