@@ -1,12 +1,14 @@
  
 .select-block label,
-.input-block label{
+.input-block label,
+.textarea-block label{
     font-size: 1.4rem;
     color: var(--color-text-complement);
 }
 
 .input-block input,
-.select-block select{
+.select-block select,
+.textarea-block textarea{
     width: 100%;
     height: 5.6rem;
     margin-top: 0.8rem;
@@ -17,13 +19,24 @@
     padding: 0 1.6rem;
     font: 1.6rem Archivo;
 }
+.textarea-block textarea{
+    padding: 1.2rem 1.6rem;
+    height: 16rem;
+    /*esse resize indica que a caixa de texto só poderar crescer para baixo */
+    resize:vertical;
+}
+
+
 /*esse focus se refere ao momento em que clico na caixinha ai ficara no estado de focus 
 esse afrer é como se fosse uma tag de html adicionada por css*/
-.input-block{
+
+.input-block,
+.textarea-block{
     /*é necessario usar esse position porque a linha que colocaramos no after precisa estar relacionada a essa caixinha, se ficasse apenas o absolute do after seria referente ao body*/
     position: relative;
 }
-.input-block:focus-within::after{
+.input-block:focus-within::after,
+.textarea-block:focus-within::after{
     /*por usar after precisa ter esse content*/
     content: "";
 
