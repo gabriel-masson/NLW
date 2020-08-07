@@ -1,0 +1,26 @@
+{
+  "name": "NLW",
+  "version": "1.0.0",
+  "description": "projeto feito na nextlevelweek",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/serve.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabriel-masson/NLW.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabriel-masson/NLW/issues"
+  },
+  "homepage": "https://github.com/gabriel-masson/NLW#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
