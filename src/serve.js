@@ -1,3 +1,4 @@
+//dados
 const proffys = [
     {
        name: "Diego Fernandes",
@@ -22,30 +23,86 @@ const proffys = [
        time_to: [1200]
      }
    ]
+   const subjects = [
+    "Artes",
+    "Biologia",
+    "Ciências",
+    "Educação física",
+    "Física",
+    "Geografia",
+    "História",
+    "Matemática",
+    "Portugês",
+    "Química"
+  ]
+
+  const weekdays = [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado",
+  ]
+
+//funcionalidades
+function getSubjects(subjectNumber) {
+  const position = +subjectNumber -1
+  return subjects[position]
+  //essa função serve para mostrar o valor do subject
+}
 
 function pageLanding(req,res){
-    return res.sendFile(__dirname + "/views/index.html")
+    //mudança feita por causa no nunjucks
+    //return res.sendFile(__dirname + "/views/index.html")
+    return res.render("index.html")
 }
 function pageStudy(req,res){
-    return res.sendFile(__dirname + "/views/study.html")
+  //o query recebe um objetos com asinformações preenchida do form ex console.log(req.query)
+    const filters = req.query
+    return res.render( "study.html",{proffys,filters,subjects,weekdays})
+    
 }
 
 function pageGiveClasses(req,res){
-    return res.sendFile(__dirname + "/views/give-classes.html")
+    const data = req.query //console.log(dados)
+    //se tiver dados add
+    
+  const isNotEmpty = Object.keys(data).length != 0
+
+  if(isNotEmpty) {
+
+    data.subject = getSubjects(data.subject)
+    proffys.push(data)
+    //apos acrecentar um proff vai mostrar na outa pag
+    return res.redirect("/study")
+  }
+   
+    return res.render( "give-classes.html",{subjects,weekdays})
 }
 
 
 
 //no time_from e time_to precisar ser em segundos
 const express = require("express") 
-const serve = express()
+const server = express()
+const nunjucks = require("nunjucks")//importando o nunjuks(template engine)
+
+//config nunjucks
+nunjucks.configure('src/views', {
+  express: server,
+  noCache: true 
+})
 //esse estatic signnifica que esse arquivos estaticos(css,js esses arquirvos ) devera ser mostrado
 //esse get é necessario pois a pag pede o / (isso é o que eu vou receber mas o que u vou dar?)é esse return res, mais pra frente eu vou enviar dados e é por esse req que ira fazer isso
     
  //esse get sera eito para cada requisição 
-serve.use(express.static("public"))
-.get("/",pageLanding)
-    
+ //configurar arquivos estaticos(css scripts imagens)
+server.use(express.static("public"))
+
+//rotas da aplicação
+.get("/",pageLanding)    
 .get("/study",pageStudy)
 .get("/give-classes",pageGiveClasses)
 .listen(5500)
