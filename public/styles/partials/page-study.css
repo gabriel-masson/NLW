@@ -123,6 +123,13 @@ margin-left: 1.6rem;
     background: var(--color-secondary-dark);
 }
 
+#page-study main .no-results{
+    max-width: 30rem;
+    margin: 12rem auto;
+    text-align: center;
+
+}
+
 /*desktop*/
 @media(min-width:700px){
     #page-study #container{
