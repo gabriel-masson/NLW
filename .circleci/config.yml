@@ -1,16 +1,37 @@
-version: 2.1 # Use version 2.1 to enable orb usage.
+workflows:
+  version: 2
+  build-and-deploy-on-hold:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+                - development
 
-orbs:
-  win: circleci/windows@2.2.0 # The Windows orb give you everything you need to start using the Windows executor.
+      - test:
+          requires:
+            - build
 
-jobs:
-  build: # name of your job
-    executor:
-      name: win/default # executor type
-      size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+      - hold:
+          type: approval
+          requires:
+            - test
 
-    steps:
-      # Commands are run in a Windows virtual machine environment
-      - checkout
-      - run: Write-Host 'Hello, Windows'
+      - deploy-development:
+          requires:
+            - test
+            - build
+          filters:
+            branches:
+              only: development
+
+      - deploy-prod:
+          requires:
+            - build
+            - test
+            - hold
+          filters:
+            branches:
+              only: master
  
