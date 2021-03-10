@@ -1,37 +1,38 @@
-workflows:
   version: 2
-  build-and-deploy-on-hold:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-                - development
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.9.4
 
-      - test:
-          requires:
-            - build
+    working_directory: ~/cicd-circleci
 
-      - hold:
-          type: approval
-          requires:
-            - test
+    steps:
+      - checkout
 
-      - deploy-development:
-          requires:
-            - test
-            - build
-          filters:
-            branches:
-              only: development
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
 
-      - deploy-prod:
-          requires:
-            - build
-            - test
-            - hold
-          filters:
-            branches:
-              only: master
- 
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+  test:
+    docker:
+      - image: circleci/node:8.9.4
+
+    working_directory: ~/cicd-circleci
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run: yarn test
