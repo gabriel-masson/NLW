@@ -1,47 +1,16 @@
-version: 2
-jobs:
-  one:
-    docker:
-      - image: circleci/ruby:2.4.1
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout
-      - run: echo "A first hello"
-      - run: mkdir -p my_workspace
-      - run: echo "Trying out workspaces" > my_workspace/echo-output
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory
-          root: my_workspace
-          # Must be relative path from root
-          paths:
-            - echo-output      
-  two:
-    docker:
-      - image: circleci/ruby:2.4.1
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout
-      - run: echo "A more familiar hi"  
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: my_workspace
+version: 2.1 # Use version 2.1 to enable orb usage.
 
-      - run: |
-          if [[ $(cat my_workspace/echo-output) == "Trying out workspaces" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
-workflows:
-  version: 2
-  one_and_two:
-    jobs:
-      - one
-      - two:
-          requires:
-            - one
+orbs:
+  win: circleci/windows@2.2.0 # The Windows orb give you everything you need to start using the Windows executor.
+
+jobs:
+  build: # name of your job
+    executor:
+      name: win/default # executor type
+      size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+
+    steps:
+      # Commands are run in a Windows virtual machine environment
+      - checkout
+      - run: Write-Host 'Hello, Windows'
  
